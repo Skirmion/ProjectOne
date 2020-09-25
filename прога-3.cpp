@@ -29,10 +29,12 @@ void drawSphere(Sphere sphere)
  {
    txBegin();
 
-   txSetColor(RGB(sphere.color.Red, sphere.color.Green, sphere.color.Blue));
-   txSetFillColor(RGB(sphere.color.Red, sphere.color.Green, sphere.color.Blue));
-   txCircle(sphere.position.x, sphere.position.y, sphere.R);
-
+   for(int i = 0; i < 100; i += 1)
+     {
+       txSetColor(RGB(sphere.color.Red*i/60, sphere.color.Green*i/60, sphere.color.Blue*i/60));
+       txSetFillColor(RGB(sphere.color.Red*i/60, sphere.color.Green*i/60, sphere.color.Blue*i/60));
+       txCircle(sphere.position.x + sphere.velocity.x * i/200 , sphere.position.y + sphere.velocity.y *i/200, sphere.R - sphere.R*i/100 );
+     };
    txEnd();
 
    txSetFillColor(RGB(0, 0, 0));
