@@ -9,19 +9,13 @@ struct Vector2i
    int y;
  };
 
-struct Color3j
- {
-   int Red;
-   int Green;
-   int Blue;
- };
 
 struct Sphere
  {
    Vector2i position;
    Vector2i velocity;
    int radius;
-   Color3j color;
+   RGBTRIPLE color;
    Vector2i refractaire;
  };
 
@@ -31,8 +25,8 @@ void drawSphere(Sphere sphere)
 
    for(int i = 0; i < 100; i += 1)
      {
-       txSetColor(RGB(sphere.color.Red*i/60, sphere.color.Green*i/60, sphere.color.Blue*i/60));
-       txSetFillColor(RGB(sphere.color.Red*i/60, sphere.color.Green*i/60, sphere.color.Blue*i/60));
+       txSetColor(RGB(sphere.color.rgbtRed*i/60, sphere.color.rgbtGreen*i/60, sphere.color.rgbtBlue*i/60));
+       txSetFillColor(RGB(sphere.color.rgbtRed*i/60, sphere.color.rgbtGreen*i/60, sphere.color.rgbtBlue*i/60));
        txCircle(sphere.position.x + sphere.velocity.x * i/200 , sphere.position.y + sphere.velocity.y *i/200, sphere.radius - sphere.radius*i/100 );
      };
    txEnd();
@@ -98,8 +92,8 @@ int main()
 
     float t = 1;
 
-    Sphere sp1 = {{200, 300},{24,63}, 50, {0, 100, 10}, {0, 0}};
-    Sphere sp2 = {{200, 300},{45,18}, 50, {100, 10, 0}, {0, 0}};
+    Sphere sp1 = {{200, 300}, {24,63}, 50, {0, 100, 10}, {0, 0}};
+    Sphere sp2 = {{200, 300}, {45,18}, 50, {0, 0, 100}, {0, 0}};
 
     while (true)
       {
