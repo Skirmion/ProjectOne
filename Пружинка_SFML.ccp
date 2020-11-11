@@ -96,17 +96,17 @@ void checkCollisionTwoSpheres(Sphere* one, Sphere* two)
 
 void lawgHookeCheck(Sphere one, Sphere two, float *k_x, float *k_y)
 {
-	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) < 30)
+	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) < 120)
 	{
 		*k_x = pow(pow((one.position.x - two.position.x), 2), 0.5) / pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5);
 		*k_y = pow(pow((one.position.y - two.position.y), 2), 0.5) / pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5);
 	};
-	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) > 30)
+	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) > 120)
 	{
 		*k_x = - pow(pow((one.position.x - two.position.x), 2), 0.5) / pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5);  
 		*k_y = - pow(pow((one.position.y - two.position.y), 2), 0.5) / pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5);
 	};
-	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) == 30)
+	if (pow(pow((one.position.x - two.position.x), 2) + pow((one.position.y - two.position.y), 2), 0.5) == 120)
 	{
 		*k_x = 0;
 		*k_y = 0;
@@ -127,17 +127,37 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(X, Y), "Window");
 
 	float t = 1;
-	int n = 3;
-	float kk = 0.00001;
+	const int n = 50;
+	float kk = 0.000008;
 
-	int spconnection[3][2] = {{2, 3}, {1, 3}, {1, 2}};
+	int spconnection[n][n - 1];
 
-	Sphere particles[3];
+		for (int k = 0; k < n; k++)
+		{
+			for (int s = 0; s < n; s++)
+			{   
+				if (k != s)
+				{
+					if (s < k)
+					{
+						spconnection[k][s] = s;
+					}
+					if (s > k)
+					{
+						spconnection[k][s - 1] = s;
+					}
+				};  
+
+			};
+
+		};
+
+	Sphere particles[n];
 	for (int i = 0; i < n; i++)
 	{
-		particles[i] = { {float(rand() % 1920), float(rand() % 1080)}, {float(1), float(1)}, 5, 0, 100, 10 };
+		particles[i] = { {float(i*5), float(i*2)}, {((-1) ^ (rand() % 2))*(float((rand() % 100)) / 100), ((-1) ^ (rand() % 2))*(float(rand() % 100) / 100)}, 5, rand()*100 % 255, rand()*100 % 255, rand()*100 % 255 };
 	};
-    ///float(2 * (-1) ^ (rand() % 2)), float(1 * (-1) ^ (rand() % 2))
+
     float k_x = 0; 
 	float k_y = 0;
 
@@ -153,12 +173,12 @@ int main()
 			}
 		};
 
-        for (int u = 0; u < 3; u++)
+        for (int u = 0; u < n; u++)
 		{
-			for (int j = 0; j < 2; j++)
+			for (int j = 0; j < n - 1; j++)
 			{
-				lawgHookeCheck(particles[u], particles[spconnection[u][j] - 1], &k_x, &k_y);
-				accelerationSpring(&particles[u], particles[spconnection[u][j] - 1], k_x, k_y, kk);
+				lawgHookeCheck(particles[u], particles[spconnection[u][j]], &k_x, &k_y);
+				accelerationSpring(&particles[u], particles[spconnection[u][j]], k_x, k_y, kk);
 			};
 		};
 
@@ -169,7 +189,7 @@ int main()
 			checkCollision(&particles[i], t, X, Y);
 			for (int j = i + 1; j < n; j++)
 			{
-				checkCollisionTwoSpheres(&particles[i], &particles[j]);
+				//checkCollisionTwoSpheres(&particles[i], &particles[j]);
 			};
 		};
 
