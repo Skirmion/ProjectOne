@@ -43,12 +43,14 @@ void List::Add(const int value)
 
 void List::Pop(const int N)                       
 {
-	Node* temp = Head;                                
+	Node* temp = Head;
+
 	if (Head != NULL)                 
 	{
 		for (int i = 0; i < N; i++) temp = temp->Next;         
 		std::cout << temp->value << " " << std::endl;                    
 	}
+
 	std::cout << std::endl;
 }
 
@@ -56,11 +58,13 @@ int List::len()
 {
 	Node* temp = Head;
 	int count = 0;
+
 	while (temp)
 	{
 		count++;
 		temp = temp->Next;
 	}
+
 	return count;
 }
 
@@ -80,6 +84,7 @@ void List::copy(List list)
 
 	Head = NULL;
 	Node* temp = list.Head;
+
 	while (temp)
 	{
 		this->Head = new Node{ temp->value, Head };
@@ -91,16 +96,20 @@ List List::operator+(List list)
 {
 	List buffer;
 	Node* temp = Head;
+
 	while (temp)
 	{
 		buffer.Head = new Node{ temp->value, Head };
 		temp = temp->Next;
 	}
+
 	temp = list.Head;
+
 	while (temp)
 	{
 		buffer.Head = new Node{ temp->value, Head };
 		temp = temp->Next;
 	}
+
 	return buffer;
 }
