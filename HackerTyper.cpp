@@ -104,8 +104,8 @@ void Hacker::moveView()
 {
 	if (event.type == sf::Event::MouseWheelScrolled)
 	{
-		view.move(0, -event.mouseWheelScroll.delta * 20);
-		positionY -= event.mouseWheelScroll.delta * 20;
+		view.move(0, -event.mouseWheelScroll.delta * (sizetext + 4));
+		positionY -= event.mouseWheelScroll.delta * (sizetext + 4) ;
 	}
 
 	if (positionY < 0)
@@ -114,15 +114,15 @@ void Hacker::moveView()
 		positionY = 0;
 	}
 
-	if (positionY > numberoflines * 16)
+	if (positionY > numberoflines * sizetext)
 	{
 		view.setCenter(windowsizeX / 2, windowsizeY / 2 + numberoflines * (sizetext - 1)  - sizetext);
-		positionY = numberoflines * 16;
+		positionY = numberoflines * sizetext;
 	}
 
 	if (numberoflines > windowsizeY / sizetext)
 	{
-		view.move(0, 15 - 1);
+		view.move(0, sizetext - 1);
 		positionY += sizetext - 1;
 		numberoflines -= 1;
 	}
