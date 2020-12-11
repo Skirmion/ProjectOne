@@ -1,0 +1,106 @@
+#include <conio.h>
+#include <iostream>
+
+struct Node                
+{
+	int value;                       
+	Node* Next;                  
+
+};
+
+class List                  
+{
+	Node* Head;               
+public:
+	List() { Head = NULL; }         
+	~List();                     
+	void Add(const int x);              
+	void copy(List);
+	void Pop(const int N);
+	int len();
+	Node getHead();
+	void operator=(List);
+	List operator+(List);
+};
+
+List::~List()                
+{
+	while (Head != NULL)          
+	{
+		Node* temp = Head->Next;  
+		delete Head;               
+		Head = temp;                  
+	}
+}
+
+void List::Add(const int value) 
+{
+	Node* temp = new Node;         
+	temp->value = value;                   
+	temp->Next = Head;                     
+	Head = temp;                           
+}
+
+void List::Pop(const int N)                       
+{
+	Node* temp = Head;                                
+	if (Head != NULL)                 
+	{
+		for (int i = 0; i < N; i++) temp = temp->Next;         
+		std::cout << temp->value << " " << std::endl;                    
+	}
+	std::cout << std::endl;
+}
+
+int List::len()
+{
+	Node* temp = Head;
+	int count = 0;
+	while (temp)
+	{
+		count++;
+		temp = temp->Next;
+	}
+	return count;
+}
+
+Node List::getHead()
+{
+	return *Head;
+}
+
+void List::operator=(List list)
+{
+	this->copy(list);
+}
+
+void List::copy(List list)
+{
+	this->~List();
+
+	Head = NULL;
+	Node* temp = list.Head;
+	while (temp)
+	{
+		this->Head = new Node{ temp->value, Head };
+		temp = temp->Next;
+	};
+};
+
+List List::operator+(List list)
+{
+	List buffer;
+	Node* temp = Head;
+	while (temp)
+	{
+		buffer.Head = new Node{ temp->value, Head };
+		temp = temp->Next;
+	}
+	temp = list.Head;
+	while (temp)
+	{
+		buffer.Head = new Node{ temp->value, Head };
+		temp = temp->Next;
+	}
+	return buffer;
+}
