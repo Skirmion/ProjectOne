@@ -15,29 +15,40 @@ private:
 	void handleInput(sf::Keyboard::Key, bool);
 	void update();
 	void moveView();
+
 private:
-	string changingText = "";
 	ifstream file;
+
+	string changingText = "";
 	string myText;
+
 	sf::RenderWindow myWindow;
 	sf::Text mapping;
 	sf::Font font;
-	int lenghtrendergetline = 0;
 	sf::View view;
-	int numberoflines = 1;
-	int buflines = 1;
-	int positionY = 0;
 	sf::Event event;
+
+	int lenghtrendergetline = 0;
+	int numberoflines = 1;
+	int positionY = 0;
+	int sizetext = 16;
+	int windowsizeX = 1920; int windowsizeY = 1080;
 };
 
 Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 {
 	file.open("text.txt");
+	string str = "";
+	while (str != "return 0;\n}")
+	{
+		getline(file, str);
+		changingText = changingText + str + "\n";
+	}
+	file.close();
 	font.loadFromFile("CyrilicOld.ttf");
 	mapping.setFont(font);
 	mapping.setPosition(10, 0);
-	mapping.setCharacterSize(16);
-	sf::Color fillColor = sf::Color(0, 0, 0);
+	mapping.setCharacterSize(sizetext);
 	mapping.setFillColor(sf::Color::Green);
 	view = myWindow.getView();
 };
@@ -67,31 +78,15 @@ void Hacker::ProcessEvents()
 
 void Hacker::handleInput(sf::Keyboard::Key key, bool isPressed)
 {
-	if (lenghtrendergetline < 0)
-	{
-		getline(file, changingText);
-		lenghtrendergetline += 1;
-	}
-
-	if (changingText.length() != 0)
+	if (changingText[lenghtrendergetline] != false)
 	{
 		myText = myText + changingText[lenghtrendergetline];
 		lenghtrendergetline ++;
-	}
 
-	if (lenghtrendergetline >= changingText.length())
-	{
-		myText = myText + "\n";
-		lenghtrendergetline = -1;
-		buflines ++;
-		numberoflines ++;
-	}
-
-	if (buflines > 1080 / 16)
-	{
-		view.move(0, 15);
-		positionY += 15;
-		buflines -= 1;
+		if (changingText[lenghtrendergetline] == '\n')
+		{
+			numberoflines++;
+		}
 	}
 
 	mapping.setString(myText);
@@ -121,15 +116,15 @@ void Hacker::moveView()
 
 	if (positionY > numberoflines * 16)
 	{
-		view.setCenter(960.f, 540.f + numberoflines * 15 - 16);
+		view.setCenter(windowsizeX / 2, windowsizeY / 2 + numberoflines * (sizetext - 1)  - sizetext);
 		positionY = numberoflines * 16;
 	}
 
-	if (buflines > 1080 / 16)
+	if (numberoflines > windowsizeY / sizetext)
 	{
-			view.move(0, 15);
-			positionY += 15;
-			buflines -= 1;
+		view.move(0, 15 - 1);
+		positionY += sizetext - 1;
+		numberoflines -= 1;
 	}
 }
 
