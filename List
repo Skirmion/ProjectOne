@@ -28,15 +28,15 @@ public:
 	List() { Head = NULL; }
 	~List();
 	void add(int);
-	void copy(List*);
 	int Pop();
 	int len();
 	void operator=(List*);
 	List operator+(List*);
-	void clear();
 private:
 	//class Node;
 	Node getHead();
+	void clear();
+	void copy(List*);
 };
 
 List::~List()
