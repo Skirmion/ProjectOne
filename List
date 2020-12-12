@@ -32,7 +32,7 @@ public:
 	int Pop();
 	int len();
 	void operator=(List*);
-	List operator+(List);
+	List operator+(List*);
 	void clear();
 private:
 	//class Node;
@@ -110,24 +110,16 @@ void List::clear()
 	}
 }
 
-List List::operator+(List list)
+List List::operator+(List* list)
 {
-	List buffer;
 	Node* temp = Head;
+	temp = list->Head;
 
 	while (temp)
 	{
-		buffer.Head = new Node{ temp->value, Head };
+		Head = new Node{ temp->value, Head };
 		temp = temp->Next;
 	}
 
-	temp = list.Head;
-
-	while (temp)
-	{
-		buffer.Head = new Node{ temp->value, Head };
-		temp = temp->Next;
-	}
-
-	return buffer;
+	return List();
 }
