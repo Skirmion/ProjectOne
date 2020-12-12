@@ -1,0 +1,51 @@
+int String::length()
+{
+	return size;
+}
+
+		render();
+	}
+}
+
+void Hacker::ProcessEvents()
+{
+	while (myWindow.pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::KeyPressed: handleInput(event.key.code, true); break;
+		case sf::Event::KeyReleased: handleInput(event.key.code, false); break;
+		case sf::Event::Closed: myWindow.close(); break;
+		}
+		moveView();
+	}
+}
+
+void Hacker::handleInput(sf::Keyboard::Key key, bool isPressed)
+{
+	if (changingText[lenghtrendergetline] != false)
+	{
+		myText = myText + changingText[lenghtrendergetline];
+		lenghtrendergetline ++;
+
+		if (changingText[lenghtrendergetline] == '\n')
+		{
+			buflines++;
+			numberoflines++;
+		}
+	}
+
+	mapping.setString(myText);
+}
+
+void Hacker::render()
+{
+	myWindow.clear();
+	myWindow.setView(view);
+	myWindow.draw(mapping);
+	myWindow.display();
+}
+
+void Hacker::moveView()
+
+return 0;
