@@ -1,6 +1,15 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <cassert> 
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(suppress : 4996) 
+
+
 using namespace std;
 
 class Hacker
@@ -13,13 +22,11 @@ private:
 	void ProcessEvents();
 	void render();
 	void handleInput(sf::Keyboard::Key, bool);
-	void update();
 	void moveView();
-
+	int lenFile(FILE*);
 private:
-	ifstream file;
 
-	string changingText = "";
+	char* changingText;
 	string myText;
 
 	sf::RenderWindow myWindow;
@@ -37,14 +44,10 @@ private:
 
 Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 {
-	file.open("text.txt");
-	string str = "";
-	while (str != "return 0;\n}")
-	{
-		getline(file, str);
-		changingText = changingText + str + "\n";
-	}
-	file.close();
+	FILE* file = fopen("text.txt", "r");
+	int sizeCode = lenFile(file);
+	int a = fread(changingText, sizeof(char), sizeCode, file);
+	fclose(file);
 	font.loadFromFile("CyrilicOld.ttf");
 	mapping.setFont(font);
 	mapping.setPosition(10, 0);
@@ -52,6 +55,14 @@ Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 	mapping.setFillColor(sf::Color::Green);
 	view = myWindow.getView();
 };
+
+int Hacker::lenFile(FILE* file)
+{      
+	fseek(file, 0, SEEK_END);
+	int lenf = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	return lenf;
+}
 
 void Hacker::run()
 {
@@ -78,10 +89,10 @@ void Hacker::ProcessEvents()
 
 void Hacker::handleInput(sf::Keyboard::Key key, bool isPressed)
 {
-	if (changingText[lenghtrendergetline] != false)
+	if (changingText[lenghtrendergetline] != '\0')
 	{
 		myText = myText + changingText[lenghtrendergetline];
-		lenghtrendergetline ++;
+		lenghtrendergetline++;
 
 		if (changingText[lenghtrendergetline] == '\n')
 		{
@@ -105,7 +116,7 @@ void Hacker::moveView()
 	if (event.type == sf::Event::MouseWheelScrolled)
 	{
 		view.move(0, -event.mouseWheelScroll.delta * (sizetext + 4));
-		positionY -= event.mouseWheelScroll.delta * (sizetext + 4) ;
+		positionY -= event.mouseWheelScroll.delta * (sizetext + 4);
 	}
 
 	if (positionY < 0)
@@ -116,7 +127,7 @@ void Hacker::moveView()
 
 	if (positionY > numberoflines * sizetext)
 	{
-		view.setCenter(windowsizeX / 2, windowsizeY / 2 + numberoflines * (sizetext - 1)  - sizetext);
+		view.setCenter(windowsizeX / 2, windowsizeY / 2 + numberoflines * (sizetext - 1) - sizetext);
 		positionY = numberoflines * sizetext;
 	}
 
