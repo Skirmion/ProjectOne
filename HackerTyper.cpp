@@ -23,9 +23,9 @@ private:
 	void render();
 	void handleInput(sf::Keyboard::Key, bool);
 	void moveView();
-	int lenFile(FILE*);
+	int lenFile();
 private:
-
+	ifstream file;
 	char* changingText;
 	string myText;
 
@@ -44,10 +44,15 @@ private:
 
 Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 {
-	FILE* file = fopen("text.txt", "r");
-	int sizeCode = lenFile(file);
-	int a = fread(changingText, sizeof(char), sizeCode, file);
-	fclose(file);
+	///file.open("d:\\1\\файл.txt");
+	file.open("text.txt");
+	int sizeCode = lenFile();
+	char* buffer = new char[sizeCode];
+	file.read(buffer, sizeCode);
+	changingText = buffer;
+	changingText += '\0';
+	///delete buffer;
+	file.close();
 	font.loadFromFile("CyrilicOld.ttf");
 	mapping.setFont(font);
 	mapping.setPosition(10, 0);
@@ -56,12 +61,12 @@ Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 	view = myWindow.getView();
 };
 
-int Hacker::lenFile(FILE* file)
-{      
-	fseek(file, 0, SEEK_END);
-	int lenf = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	return lenf;
+int Hacker::lenFile()
+{
+	file.seekg(0, ios_base::end); //Стать в конец файла
+	int lenf = file.tellg();
+	file.seekg(0, ios_base::beg);
+	return lenf + 2;
 }
 
 void Hacker::run()
@@ -89,7 +94,8 @@ void Hacker::ProcessEvents()
 
 void Hacker::handleInput(sf::Keyboard::Key key, bool isPressed)
 {
-	if (changingText[lenghtrendergetline] != '\0')
+	if (changingText[lenghtrendergetline] != '"\"' and changingText[lenghtrendergetline + 1] != '0')
+
 	{
 		myText = myText + changingText[lenghtrendergetline];
 		lenghtrendergetline++;
