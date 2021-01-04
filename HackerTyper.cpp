@@ -44,14 +44,15 @@ private:
 
 Hacker::Hacker() : myWindow(sf::VideoMode(1920, 1080), "Hack")
 {
-	///file.open("d:\\1\\файл.txt");
-	file.open("text.txt");
+	string a = "text.txt";
+	file.open("C:\\Users\\micha\\Desktop\\NW\\Project1\\Project1\\"+ a);
 	int sizeCode = lenFile();
 	char* buffer = new char[sizeCode];
 	file.read(buffer, sizeCode);
 	changingText = buffer;
+	buffer = new char[0];
 	changingText += '\0';
-	///delete buffer;
+	delete buffer;
 	file.close();
 	font.loadFromFile("CyrilicOld.ttf");
 	mapping.setFont(font);
@@ -66,7 +67,7 @@ int Hacker::lenFile()
 	file.seekg(0, ios_base::end); //Стать в конец файла
 	int lenf = file.tellg();
 	file.seekg(0, ios_base::beg);
-	return lenf + 2;
+	return lenf;
 }
 
 void Hacker::run()
